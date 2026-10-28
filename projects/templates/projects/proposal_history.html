@@ -1,0 +1,19 @@
+{% load ui %}
+{% if proposals %}
+<section class="card spaced">
+    <h3>{% tr 'Ваши предложения и решения' 'Takliflaringiz va qarorlar' %}</h3>
+    {% for proposal in proposals %}
+    <article class="task-preview spaced">
+        <div class="flex between wrap">
+            <strong>+{{ proposal.hours }} {% tr 'ч' 'soat' %} / +{{ proposal.days }} {% tr 'дн' 'kun' %}</strong>
+            <span class="badge {% if proposal.status == 'pending' %}amber{% elif proposal.status == 'rejected' %}red{% endif %}">{% if uz %}{{ proposal.status_uz }}{% else %}{{ proposal.get_status_display }}{% endif %}</span>
+        </div>
+        <small>{{ proposal.created_at|date:'d.m.Y H:i' }}</small>
+        {% if proposal.question %}<p class="spaced">{{ proposal.question|linebreaksbr }}</p>{% endif %}
+        {% if proposal.feedback %}
+        <div class="notice spaced"><strong>{% tr 'Комментарий к решению' 'Qaror izohi' %}</strong><p>{{ proposal.feedback|linebreaksbr }}</p><small>{{ proposal.reviewed_by.username|default:'—' }} · {{ proposal.reviewed_at|date:'d.m.Y H:i' }}</small></div>
+        {% endif %}
+    </article>
+    {% endfor %}
+</section>
+{% endif %}

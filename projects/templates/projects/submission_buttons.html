@@ -1,0 +1,7 @@
+{% load ui %}
+<div class="flex wrap">
+    <button class="btn primary" name="action" value="submit">{% tr 'Отправить на проверку' 'Tekshiruvga yuborish' %}{% icon 'arrow' %}</button>
+    <button class="btn outline" name="action" value="draft" formnovalidate>{% icon 'file' %}{% tr 'Сохранить черновик' 'Qoralamani saqlash' %}</button>
+    <a class="text-link" href="{% url 'task' task.slug %}">{% tr 'Отмена' 'Bekor qilish' %}</a>
+</div>
+<small class="field-help">{% tr 'Черновик можно сохранить без ссылки и чек-листа. На проверку он не отправляется. При окончательной отправке заполните все обязательные поля.' 'Qoralamani havola va tekshiruv ro‘yxatisiz saqlash mumkin. U tekshiruvga yuborilmaydi. Yakuniy yuborishda barcha majburiy maydonlarni to‘ldiring.' %}</small>

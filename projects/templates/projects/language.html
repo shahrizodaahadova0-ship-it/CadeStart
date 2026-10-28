@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeStart — Language</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            background: #f5f9ff;
+        }
+
+        .language-box {
+            width: 420px;
+            padding: 45px 35px;
+            background: white;
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient(90deg, #2563eb, #16a34a);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h1 {
+            font-size: 25px;
+            color: #172033;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        button {
+            padding: 16px;
+            border: none;
+            border-radius: 14px;
+            background: #f1f5f9;
+            color: #172033;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            background: #e2e8f0;
+        }
+
+        .ru {
+            border: 2px solid #2563eb;
+        }
+
+        .uz {
+            border: 2px solid #16a34a;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="language-box">
+
+    <div class="logo">CodeStart</div>
+
+    <h1>Выберите язык</h1>
+
+    <p class="subtitle">
+        Choose your preferred language
+    </p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <button class="ru" type="submit" name="language" value="ru">
+            🇷🇺 Русский
+        </button>
+
+        <button class="uz" type="submit" name="language" value="uz">
+            🇺🇿 O'zbekcha
+        </button>
+    </form>
+
+</div>
+
+</body>
+</html>

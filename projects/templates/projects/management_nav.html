@@ -1,0 +1,6 @@
+{% load ui %}
+{% if user.is_staff %}
+<span class="nav-caption">{% tr 'РАБОЧИЕ РАЗДЕЛЫ' 'ISH BO‘LIMLARI' %}</span>
+<a href="{% url 'reviewer' %}" class="{% if active == 'reviewer' %}active{% endif %}" {% if active == 'reviewer' %}aria-current="page"{% endif %}>{% icon 'check' %}{% tr 'Мои проверки' 'Mening tekshiruvlarim' %}</a>
+<a href="{% url 'content_admin' %}" class="{% if active == 'content_admin' %}active{% endif %}" {% if active == 'content_admin' %}aria-current="page"{% endif %}>{% icon 'file' %}{% tr 'Учебные материалы' 'O‘quv materiallari' %}</a>
+{% endif %}

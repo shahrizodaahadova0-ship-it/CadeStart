@@ -1,0 +1,20 @@
+{% load ui %}
+{% if can_manage_submissions or can_manage_proposals %}
+<section class="grid-3 spaced">
+    {% if can_manage_submissions %}
+    <a class="card metric" href="{% url 'admin:projects_submission_changelist' %}?status__exact=review&amp;reviewer__isnull=True">
+        <span class="icon-tile">{% icon 'user' %}</span><div><small>{% tr 'Без ревьюера' 'Reviewersiz' %}</small><strong>{{ unassigned_count }}</strong><p>{% tr 'Назначить проверяющего' 'Tekshiruvchini tayinlash' %} →</p></div>
+    </a>
+    <a class="card metric" href="{% url 'admin:projects_submission_changelist' %}?status__exact=review">
+        <span class="icon-tile blue">{% icon 'clock' %}</span><div><small>{% tr 'Ожидают проверки' 'Tekshiruvni kutmoqda' %}</small><strong>{{ pending_review_count }}</strong><p>{% tr 'Открыть очередь' 'Navbatni ochish' %} →</p></div>
+    </a>
+    {% endif %}
+    {% if can_manage_proposals %}
+    <a class="card metric" href="{% url 'admin:projects_changeproposal_changelist' %}?status__exact=pending">
+        <span class="icon-tile">{% icon 'file' %}</span><div><small>{% tr 'Предложения на согласование' 'Kelishish uchun takliflar' %}</small><strong>{{ pending_proposal_count }}</strong><p>{% tr 'Рассмотреть предложения' 'Takliflarni ko‘rib chiqish' %} →</p></div>
+    </a>
+    {% endif %}
+</section>
+{% else %}
+<div class="notice spaced">{% tr 'Вы можете проверять назначенные вам работы. Управление общей очередью доступно администраторам с соответствующими правами.' 'Sizga tayinlangan ishlarni tekshirishingiz mumkin. Umumiy navbatni boshqarish tegishli ruxsatli administratorlar uchun ochiq.' %} <a href="{% url 'reviewer' %}" class="text-link">{% tr 'Мои проверки' 'Mening tekshiruvlarim' %} →</a></div>
+{% endif %}

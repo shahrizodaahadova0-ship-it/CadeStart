@@ -1,0 +1,7 @@
+{% load ui %}
+{% if can_manage_submissions or perms.projects.change_project %}
+<div class="grid-2 spaced">
+    {% if can_manage_submissions %}<section class="card"><h3>{% tr 'Решения и ревьюеры' 'Yechimlar va reviewerlar' %}</h3><p>{% tr 'Назначайте проверяющих и управляйте результатами.' 'Tekshiruvchilarni tayinlang va natijalarni boshqaring.' %}</p><a class="btn outline" href="{% url 'admin:projects_submission_changelist' %}">{% tr 'Управлять решениями' 'Yechimlarni boshqarish' %}</a></section>{% endif %}
+    {% if perms.projects.change_project %}<section class="card"><h3>{% tr 'Библиотека проектов' 'Loyihalar kutubxonasi' %}</h3><p>{% tr 'Редактируйте проекты публичного каталога.' 'Ommaviy katalog loyihalarini tahrirlang.' %}</p><a class="btn outline" href="{% url 'admin:projects_project_changelist' %}">{% tr 'Управлять проектами' 'Loyihalarni boshqarish' %}</a></section>{% endif %}
+</div>
+{% endif %}

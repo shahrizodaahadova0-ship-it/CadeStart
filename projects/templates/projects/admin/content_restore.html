@@ -1,0 +1,10 @@
+{% extends 'admin/base_site.html' %}
+{% block content %}
+<h1>{{ material }}</h1>
+<p>Будет восстановлен текст до изменения #{{ entry.pk }}. Текущая редакция сохранится в истории. У задания появится новая версия, а ранее отправленные решения сохранят свои критерии.</p>
+<p>#{{ entry.pk }} o‘zgarishidan oldingi matn tiklanadi. Joriy tahrir tarixda saqlanadi. Vazifa yangi versiya oladi, avvalgi yechimlar esa o‘z mezonlarini saqlaydi.</p>
+{% for error in restore_errors %}<p class="errornote" role="alert">{{ error }}</p>{% endfor %}
+<details open><summary>Текущая редакция / Joriy tahrir</summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{{ current_text }}</pre></details>
+<details open><summary>Восстанавливаемая редакция / Tiklanadigan tahrir</summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{{ target_text }}</pre></details>
+<form method="post">{% csrf_token %}<input type="hidden" name="token" value="{{ restore_token }}"><div class="submit-row"><input type="submit" class="default" value="Подтвердить восстановление / Tiklashni tasdiqlash"><a href="{% url 'admin:projects_contentedit_change' entry.pk %}">Отмена / Bekor qilish</a></div></form>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'projects/base.html' %}
+{% load ui %}
+{% block content %}
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">FIND YOUR STARTING POINT</span>
+        <h1 class="spaced">{% tr 'Определение уровня' 'Darajani aniqlash' %}</h1>
+        <p>{% tr '12 вопросов. Время не ограничено. Можно сохранить ответы и вернуться позже.' '12 ta savol. Vaqt cheklanmagan. Javoblarni saqlab, keyin qaytishingiz mumkin.' %}</p>
+    </div>
+    <button form="diagnostic-form" type="submit" name="action" value="save" class="btn outline small-btn">
+        {% icon 'file' %}{% tr 'Сохранить и выйти' 'Saqlash va chiqish' %}
+    </button>
+</div>
+<div class="notice info">
+    {% tr 'Это учебная диагностика, а не профессиональная сертификация. Если не знаете ответ, выберите «Не знаю».' 'Bu o‘quv diagnostikasi, professional sertifikat emas. Javobni bilmasangiz, «Bilmayman» ni tanlang.' %}
+</div>
+<form method="post" id="diagnostic-form" class="diagnostic-question" data-diagnostic data-start-step="{{ step }}">
+    {% csrf_token %}
+    <input type="hidden" name="step" value="{{ step }}" data-current-step>
+    <div class="progress-meta">
+        <span data-question-count>1 / {{ questions|length }}</span>
+        <div class="progress-track" data-question-progress><span></span></div>
+    </div>
+    {% for question in questions %}
+    <section class="card question-panel spaced" data-question="{{ forloop.counter0 }}" {% if not forloop.first %}hidden{% endif %}>
+        <span class="badge">{{ question.title }}</span>
+        <h2 class="spaced">{% tr 'Какой ответ верный?' 'Qaysi javob to‘g‘ri?' %}</h2>
+        <pre>{{ question.code }}</pre>
+        {% with index=forloop.counter0 %}
+        {% for answer in question.answers %}
+        <label class="answer">
+            <input type="radio" name="q{{ index }}" value="{{ forloop.counter0 }}" {% if question.selected == forloop.counter0|stringformat:'s' %}checked{% endif %}>
+            {{ answer }}
+        </label>
+        {% endfor %}
+        <label class="answer">
+            <input type="radio" name="q{{ index }}" value="skip" {% if question.selected == 'skip' %}checked{% endif %}>
+            {% tr 'Не знаю' 'Bilmayman' %}
+        </label>
+        {% endwith %}
+    </section>
+    {% endfor %}
+    <div class="question-nav spaced">
+        <button type="button" class="btn outline" data-prev-question>← {% tr 'Назад' 'Orqaga' %}</button>
+        <button type="button" class="btn primary" data-next-question>{% tr 'Следующий вопрос' 'Keyingi savol' %}{% icon 'arrow' %}</button>
+        <button type="submit" name="action" value="complete" class="btn primary" data-finish-diagnostic hidden>
+            {% tr 'Посмотреть результат' 'Natijani ko‘rish' %}{% icon 'arrow' %}
+        </button>
+    </div>
+</form>
+{% endblock %}

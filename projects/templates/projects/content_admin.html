@@ -1,0 +1,39 @@
+{% extends 'projects/base.html' %}
+{% load ui %}
+{% block content %}<div class="page-heading">
+<div>
+<span class="eyebrow">ADMINISTRATOR</span>
+<h1 class="spaced">{% tr 'Управление контентом' 'Kontent boshqaruvi' %}</h1>
+<p>{% tr 'Учебные материалы и управление пользовательскими решениями.' 'O‘quv materiallari va foydalanuvchi yechimlarini boshqarish.' %}</p>
+</div>
+{% if perms.projects %}<a class="btn primary small-btn" href="{% url 'admin:index' %}">{% tr 'Панель Django' 'Django paneli' %}
+{% icon 'arrow' %}</a>{% endif %}
+</div>{% include 'projects/management_overview.html' %}<section class="card">
+<h2>{% tr 'Уроки' 'Darslar' %}</h2>
+{% include 'projects/content_help.html' %}
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>{% tr 'Название' 'Nomi' %}</th>
+<th>{% tr 'Уровень' 'Daraja' %}</th>
+<th>{% tr 'Время' 'Vaqt' %}</th>
+<th>
+</th>
+</tr>
+</thead>
+<tbody>{% for lesson in lessons %}<tr>
+<td>
+<strong>{% if uz %}{{ lesson.uz }}{% else %}{{ lesson.title }}{% endif %}</strong>
+<p>{{ lesson.summary }}</p>
+</td>
+<td>{{ lesson.level }}</td>
+<td>{{ lesson.minutes }} min</td>
+<td>
+{% include 'projects/lesson_edit_link.html' %}<a href="{% url 'lesson' lesson.slug %}" class="text-link">{% tr 'Открыть' 'Ochish' %}</a>
+</td>
+</tr>{% endfor %}</tbody>
+</table>
+</div>
+</section>
+{% include 'projects/management_actions.html' %}{% include 'projects/task_content_table.html' %}{% include 'projects/content_history_link.html' %}{% endblock %}

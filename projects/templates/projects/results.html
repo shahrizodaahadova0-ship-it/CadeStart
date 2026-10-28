@@ -1,0 +1,65 @@
+{% extends 'projects/base.html' %}
+{% load ui %}
+{% block content %}<div class="page-heading">
+<div>
+<span class="eyebrow">YOUR PROGRESS, YOUR PACE</span>
+<h1 class="spaced">{% tr 'Ваше развитие' 'Ko‘nikmalaringiz rivoji' %}</h1>
+<p>{% tr 'Результаты основаны на ваших действиях и проверках.' 'Natijalar sizning harakatlaringiz va tekshiruvlarga asoslangan.' %}</p>
+</div>
+<a class="btn primary small-btn" href="{% url 'report' %}">{% icon 'file' %}
+{% tr 'Открыть отчёт' 'Hisobotni ochish' %}</a>
+</div>
+<div class="grid-3">
+<div class="card metric">
+<span class="icon-tile">{% icon 'book' %}</span>
+<div>
+<small>{% tr 'Изученные уроки' 'O‘rganilgan darslar' %}</small>
+<strong>{{ completed }}</strong>
+<p>{% tr 'Из' 'Jami' %} {{ total }}</p>
+</div>
+</div>
+<div class="card metric">
+<span class="icon-tile blue">{% icon 'file' %}</span>
+<div>
+<small>{% tr 'Отправленные решения' 'Yuborilgan yechimlar' %}</small>
+<strong>{{ submission_count }}</strong>
+<p>{% tr 'Все попытки' 'Barcha urinishlar' %}</p>
+</div>
+</div>
+<div class="card metric">
+<span class="icon-tile">{% icon 'check' %}</span>
+<div>
+<small>{% tr 'Принятые решения' 'Qabul qilingan yechimlar' %}</small>
+<strong>{{ accepted }}</strong>
+<p>{% tr 'Подтверждены ревьюером' 'Reviewer tasdiqlagan' %}</p>
+</div>
+</div>
+</div>
+<div class="split spaced">
+<section class="card">
+<h3 class="card-title">{% icon 'chart' %}
+{% tr 'Темы учебного пути' 'O‘quv yo‘li mavzulari' %}</h3>
+<p class="spaced">{% tr 'Отметки об изучении не являются оценкой владения навыком.' 'O‘rganish belgilari ko‘nikmani egallash bahosi emas.' %}</p>{% for lesson in lessons %}<div class="skill-row">
+<span>{% if uz %}{{ lesson.uz }}{% else %}{{ lesson.title }}{% endif %}</span>
+<div class="progress-track {% if lesson.done %}is-complete{% endif %}">
+<span>
+</span>
+</div>
+<span class="badge {% if not lesson.done %}muted{% endif %}">{% if lesson.done %}
+{% tr 'Изучено' 'O‘rganildi' %}
+{% else %}
+{% tr 'Впереди' 'Oldinda' %}
+{% endif %}</span>
+</div>{% endfor %}</section>
+<aside class="card help-card">
+<span class="icon-tile">{% icon 'leaf' %}</span>
+<h2 class="spaced">{% tr 'Следующий шаг' 'Keyingi qadam' %}</h2>
+<h3>{% if uz %}{{ current.uz }}{% else %}{{ current.title }}{% endif %}</h3>
+<p>{{ current.summary }}</p>
+<a class="btn primary block" href="{% url 'lesson' current.slug %}">{% tr 'Продолжить обучение' 'O‘qishni davom ettirish' %}
+{% icon 'arrow' %}</a>
+<p class="field-help">{% tr 'Рекомендация по следующему неизученному уроку.' 'Keyingi o‘rganilmagan dars bo‘yicha tavsiya.' %}</p>
+</aside>
+</div>
+{% include 'projects/results_table.html' %}
+{% include 'projects/lesson_check_summary.html' %}{% endblock %}

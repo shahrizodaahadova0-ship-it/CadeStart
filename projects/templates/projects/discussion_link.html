@@ -1,0 +1,2 @@
+{% load ui %}
+<a class="btn outline small-btn spaced" href="{% url 'discussion' submission.pk %}">{% icon 'chat' %}{% tr 'Обсудить решение' 'Yechimni muhokama qilish' %} · {{ submission.comments.count }}</a>

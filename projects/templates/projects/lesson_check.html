@@ -1,0 +1,23 @@
+{% load ui %}
+<section class="card spaced" id="self-check">
+    <div class="card-header"><h2 class="card-title">{% icon 'check' %}{% tr 'Проверьте понимание' 'Tushunganingizni tekshiring' %}</h2>
+        {% if progress.quiz_score != None and progress %}<span class="badge">{{ progress.quiz_score }} / 100</span>{% endif %}
+    </div>
+    <p>{% tr 'Короткая самопроверка по теме урока. Она не выполняет ваш код и не заменяет проверку практического задания. Перед отправкой сохраните изменения в редакторе.' 'Dars mavzusi bo‘yicha qisqa tekshiruv. U kodingizni bajarmaydi va amaliy vazifa tekshiruvini almashtirmaydi. Yuborishdan oldin muharrirdagi o‘zgarishlarni saqlang.' %}</p>
+    <form method="post" class="fields lesson-check">
+        {% csrf_token %}<input type="hidden" name="action" value="check">
+        {% for item in quiz_fields %}
+        <fieldset class="quiz-question">
+            <legend>{{ item.field.label }}</legend>
+            <pre>{{ item.code }}</pre>
+            {{ item.field }}{{ item.field.errors }}
+            {% if progress.quiz_score != None and progress %}
+            <div class="notice {% if not item.correct %}info{% endif %}">
+                <strong>{% if item.correct %}{% tr 'Верно' 'To‘g‘ri' %}{% else %}{% tr 'Попробуйте разобраться ещё раз' 'Yana tushunib ko‘ring' %}{% endif %}</strong><p class="no-margin">{{ item.explanation }}</p>
+            </div>
+            {% endif %}
+        </fieldset>
+        {% endfor %}
+        <button class="btn primary">{% tr 'Проверить ответы' 'Javoblarni tekshirish' %}{% icon 'arrow' %}</button>
+    </form>
+</section>

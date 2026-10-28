@@ -1,0 +1,5 @@
+{% extends 'error_base.html' %}
+{% block title %}403 · CodeStart{% endblock %}
+{% block code %}403{% endblock %}
+{% block heading %}{% if uz %}Kirish cheklangan{% else %}Доступ ограничен{% endif %}{% endblock %}
+{% block explanation %}{% if uz %}Bu amal uchun hisobingizda yetarli ruxsat yo‘q. Boshqa hisob bilan kiring yoki loyiha administratoriga murojaat qiling.{% else %}У вашего аккаунта нет прав на это действие. Войдите в другой аккаунт или обратитесь к администратору проекта.{% endif %}{% endblock %}

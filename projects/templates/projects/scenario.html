@@ -1,0 +1,57 @@
+{% extends 'projects/base.html' %}
+{% load ui %}
+{% block content %}<div class="page-heading">
+<div>
+<h1>{% tr 'Требования изменились' 'Talabga o‘zgartirish kiritildi' %}</h1>
+<p>{% tr 'Учебная ситуация: оцените влияние на объём работ и сроки.' 'O‘quv vaziyati: ish hajmi va muddatga ta’sirini baholang.' %}</p>
+</div>
+<span class="badge amber">{% tr 'Нужно согласовать' 'Kelishish kerak' %}</span>
+</div>{% include 'projects/company_tabs.html' %}<div class="notice flex top">{% icon 'user' %}<span>
+<strong>{% tr 'Сообщение виртуального менеджера' 'Virtual menejer xabari' %}</strong>
+<br>{% tr 'Клиент попросил добавить промокоды к заказу. Подготовьте оценку и уточняющие вопросы.' 'Mijoz buyurtmaga promo-kod qo‘shishni so‘radi. Baho va aniqlashtirish savollarini tayyorlang.' %}</span>
+</div>
+<div class="grid-2">
+<section class="card">
+<div class="card-header">
+<h3>{% tr 'Текущие требования v1' 'Amaldagi talab v1' %}</h3>
+<span class="badge">{% tr 'Текущая версия' 'Joriy versiya' %}</span>
+</div>
+<ul>
+<li>{% tr 'Каталог товаров и категории.' 'Mahsulotlar va kategoriyalar.' %}</li>
+<li>{% tr 'Корзина и оформление заказа.' 'Savat va buyurtma yaratish.' %}</li>
+<li>{% tr 'Проверка доступа и количества товаров.' 'Ruxsatlar va mahsulot sonini tekshirish.' %}</li>
+</ul>
+</section>
+<section class="card">
+<div class="card-header">
+<h3>{% tr 'Предлагаемые требования v2' 'Taklif etilgan talab v2' %}</h3>
+<span class="badge amber">{% tr 'Новое требование' 'Yangi talab' %}</span>
+</div>
+<ul>
+<li>{% tr 'Ввод промокода при оформлении заказа.' 'Buyurtma vaqtida promo-kod kiritish.' %}</li>
+<li>{% tr 'Скидка в процентах или фиксированной сумме.' 'Foiz yoki belgilangan summadagi chegirma.' %}</li>
+<li>{% tr 'Срок действия и лимит использований.' 'Amal qilish muddati va foydalanish limiti.' %}</li>
+<li>{% tr 'Понятная ошибка для недействительного кода.' 'Noto‘g‘ri kod uchun tushunarli xabar.' %}</li>
+</ul>
+</section>
+</div>
+<div class="split spaced">
+<section class="card">
+<h2>{% tr 'Ваше предложение' 'Sizning taklifingiz' %}</h2>
+<form method="post" class="fields">{% csrf_token %}<div>
+<label for="id_question">{% tr 'Уточняющий вопрос (необязательно)' 'Aniqlashtirish savoli (ixtiyoriy)' %}</label>{{ form.question }}{{ form.question.errors }}</div>
+<div class="grid-2">
+<div>
+<label for="id_hours">{% tr 'Дополнительная работа, часы' 'Qo‘shimcha ish, soat' %}</label>{{ form.hours }}{{ form.hours.errors }}</div>
+<div>
+<label for="id_days">{% tr 'Дополнительный срок, дни' 'Qo‘shimcha muddat, kun' %}</label>{{ form.days }}{{ form.days.errors }}</div>
+</div>
+<button class="btn primary">{% tr 'Сохранить предложение' 'Taklifni saqlash' %}
+{% icon 'arrow' %}</button>
+</form>
+</section>
+<aside class="card">
+<span class="icon-tile">{% icon 'check' %}</span>
+<h3 class="spaced">{% tr 'Первая версия оценивается отдельно' 'Birinchi versiya alohida baholanadi' %}</h3>{% include 'projects/proposal_process.html' %}</aside>
+</div>{% include 'projects/proposal_history.html' %}
+{% endblock %}

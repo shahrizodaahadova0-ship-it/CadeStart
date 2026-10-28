@@ -1,0 +1,9 @@
+{% load ui %}
+{% if progress.completed %}
+<section class="card spaced">
+    <div class="flex between wrap">
+        <div><h3>{% tr 'Хотите повторить тему?' 'Mavzuni takrorlamoqchimisiz?' %}</h3><p class="no-margin">{% tr 'Можно снять отметку изучения. Заметки и результат самопроверки останутся в аккаунте.' 'O‘rganildi belgisini olib tashlash mumkin. Qaydlar va tekshiruv natijasi hisobda qoladi.' %}</p></div>
+        <form method="post">{% csrf_token %}<button class="btn outline" name="action" value="reopen">{% tr 'Вернуться к повторению' 'Takrorlashga qaytish' %}</button></form>
+    </div>
+</section>
+{% endif %}

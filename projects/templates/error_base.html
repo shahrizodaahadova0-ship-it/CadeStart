@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="{{ current_language|default:'ru' }}">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#091725"><title>{% block title %}CodeStart{% endblock %}</title><link rel="stylesheet" href="{% static 'projects/app.css' %}"></head>
+<body>
+    <header class="public-header"><a class="brand" href="/">Code<span>Start</span></a></header>
+    <main class="landing-section">
+        <section class="card empty-state">
+            <span class="eyebrow">{% block code %}{% endblock %} · CODESTART</span>
+            <h1 class="spaced">{% block heading %}{% endblock %}</h1>
+            <p>{% block explanation %}{% endblock %}</p>
+            <div class="flex wrap" style="justify-content:center">
+                <a class="btn primary" href="/">{% if uz %}Bosh sahifaga{% else %}На главную{% endif %} →</a>
+                <a class="btn outline" href="/login/">{% if uz %}Hisobga kirish{% else %}Войти в аккаунт{% endif %}</a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

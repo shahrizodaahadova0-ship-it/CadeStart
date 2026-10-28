@@ -1,0 +1,7 @@
+{% load ui %}
+{% if task %}
+<section class="spaced">
+    <h3>{% tr 'Критерии задания' 'Vazifa mezonlari' %} <span class="badge muted">v{{ task.revision|default:1 }}</span></h3>
+    <ul>{% if uz %}{% for criterion in task.uz_requirements %}<li>{{ criterion }}</li>{% endfor %}{% else %}{% for criterion in task.requirements %}<li>{{ criterion }}</li>{% endfor %}{% endif %}</ul>
+</section>
+{% endif %}

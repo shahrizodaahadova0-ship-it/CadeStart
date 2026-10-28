@@ -1,0 +1,1 @@
+{% load ui %}<form class="language-switch" method="post" action="{% url 'language_choice' %}">{% csrf_token %}<button name="language" value="ru" class="{% if not uz %}selected{% endif %}" aria-label="Русский">RU</button><span>/</span><button name="language" value="uz" class="{% if uz %}selected{% endif %}" aria-label="O‘zbekcha">UZ</button></form>

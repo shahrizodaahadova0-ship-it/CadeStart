@@ -1,0 +1,2 @@
+{% load ui %}
+{% if latest %}{% if uz %}{{ latest.status_uz }}{% else %}{{ latest.get_status_display }}{% endif %}{% elif draft %}{% tr 'В работе' 'Jarayonda' %}{% else %}{% tr 'Готова к работе' 'Boshlashga tayyor' %}{% endif %}

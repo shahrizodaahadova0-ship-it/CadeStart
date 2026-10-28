@@ -1,0 +1,49 @@
+{% extends 'projects/base.html' %}
+{% load ui %}
+{% block content %}
+<div class="page-heading">
+    <div>
+        <h1>{% tr 'Уведомления' 'Bildirishnomalar' %}</h1>
+        <p>{% tr 'Результаты проверок и важные события в одном месте.' 'Tekshiruv natijalari va muhim xabarlar bir joyda.' %}</p>
+    </div>
+    {% if unread_notifications %}
+    <form method="post">{% csrf_token %}<button class="btn primary small-btn">{% icon 'check' %}{% tr 'Отметить всё прочитанным' 'Barchasini o‘qildi deb belgilash' %}</button></form>
+    {% endif %}
+</div>
+<section class="card">
+    <nav class="tabs">
+        <a href="{% url 'notifications' %}" class="{% if request.GET.filter != 'unread' %}active{% endif %}">{% tr 'Все' 'Barchasi' %}</a>
+        <a href="?filter=unread" class="{% if request.GET.filter == 'unread' %}active{% endif %}">{% tr 'Непрочитанные' 'O‘qilmagan' %} · {{ unread_notifications }}</a>
+    </nav>
+    {% for entry in notifications %}
+    <article class="notification {% if not entry.read %}unread{% endif %}">
+        <span class="icon-tile">{% icon 'file' %}</span>
+        <div class="notification-content">
+            <h3>{{ entry.title }}</h3>
+            <p>{{ entry.text }}</p>
+            <form method="post" action="{% url 'notification_read' entry.pk %}" class="notification-actions">
+                {% csrf_token %}
+                <input type="hidden" name="filter" value="{{ request.GET.filter }}">
+                <button class="btn outline small-btn" name="action" value="open">{% tr 'Открыть' 'Ochish' %}{% icon 'arrow' %}</button>
+                {% if not entry.read %}<button class="text-button" name="action" value="read">{% icon 'check' %}{% tr 'Прочитано' 'O‘qildi' %}</button>{% endif %}
+            </form>
+        </div>
+        <small>{{ entry.created_at|date:'d.m.Y H:i' }}</small>
+    </article>
+    {% empty %}
+    <div class="empty-state">
+        <span class="icon-tile big">{% icon 'bell' %}</span>
+        <h2>{% if request.GET.filter == 'unread' %}{% tr 'Всё прочитано' 'Barcha xabarlar o‘qilgan' %}{% else %}{% tr 'Пока всё спокойно' 'Hozircha xabarlar yo‘q' %}{% endif %}</h2>
+        <p>{% tr 'Здесь появятся сообщения об отправленных решениях и результатах проверки.' 'Bu yerda yuborilgan yechimlar va tekshiruv natijalari haqida xabarlar paydo bo‘ladi.' %}</p>
+        <a href="{% url 'kanban' %}" class="btn primary">{% tr 'К заданиям' 'Vazifalarga o‘tish' %}{% icon 'arrow' %}</a>
+    </div>
+    {% endfor %}
+    {% if notifications.has_other_pages %}
+    <nav class="pagination spaced" aria-label="{% tr 'Страницы уведомлений' 'Bildirishnomalar sahifalari' %}">
+        {% if notifications.has_previous %}<a class="btn outline small-btn" href="{% querystring page=notifications.previous_page_number %}">← {% tr 'Назад' 'Orqaga' %}</a>{% endif %}
+        <span>{{ notifications.number }} / {{ notifications.paginator.num_pages }}</span>
+        {% if notifications.has_next %}<a class="btn outline small-btn" href="{% querystring page=notifications.next_page_number %}">{% tr 'Далее' 'Keyingi' %} →</a>{% endif %}
+    </nav>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'projects/base.html' %}
+{% load ui %}
+{% block content %}<div class="page-heading">
+<div>
+<span class="eyebrow">YOUR LEARNING RECORD</span>
+<h1 class="spaced">{% tr 'Отчёт о виртуальной практике' 'Virtual amaliyot hisoboti' %}</h1>
+<p>{% tr 'Учебные результаты, задания и обратная связь.' 'O‘quv natijalari, vazifalar va fikr-mulohazalar.' %}</p>
+</div>
+<span class="badge">{% tr 'Учебная симуляция' 'O‘quv simulyatsiyasi' %}</span>
+</div>
+<div class="grid-2">
+<section class="card">
+<div class="flex">
+<span class="avatar large">{{ user.username|first|upper }}</span>
+<div>
+<h2>{{ user.first_name|default:user.username }}</h2>
+<p class="no-margin">Python Backend · {{ completed }} / {{ total }} {% tr 'уроков' 'dars' %}</p>
+</div>
+</div>
+</section>
+<section class="card no-print">
+<div class="flex wrap">
+<a class="btn primary small-btn" href="?format=markdown">{% icon 'download' %}Markdown</a>
+<a class="btn outline small-btn" href="?format=json">{% icon 'code' %}JSON</a>
+<button type="button" class="btn outline small-btn" data-print>{% icon 'file' %}
+{% tr 'Печать' 'Chop etish' %}</button>
+</div>
+<small class="field-help spaced">{% tr 'Отчёт доступен только в вашем аккаунте. Публичная ссылка не создаётся.' 'Hisobot faqat hisobingizda mavjud. Ommaviy havola yaratilmaydi.' %}</small>
+</section>
+</div>{% include 'projects/report_summary.html' %}<section class="card spaced">
+<h2>{% tr 'Практические задания' 'Amaliy vazifalar' %}</h2>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>{% tr 'Задание' 'Vazifa' %}</th>
+<th>{% tr 'Результат' 'Natija' %}</th>
+<th>Commit</th>
+<th>{% tr 'Обратная связь' 'Fikr-mulohaza' %}</th>
+</tr>
+</thead>
+<tbody>{% for entry in submissions %}<tr>
+<td>
+<strong>{% if uz %}{{ entry.task_title_uz }}{% else %}{{ entry.task_title }}{% endif %}</strong>
+<p>{{ entry.created_at|date:'d.m.Y' }}</p>
+</td>
+<td>
+<span class="badge">{% if uz %}{{ entry.status_uz }}{% else %}{{ entry.get_status_display }}{% endif %}</span>
+</td>
+<td>
+<code>{{ entry.commit|default:'—' }}</code>
+</td>
+<td>{{ entry.feedback|default:'—' }}</td>
+</tr>{% empty %}<tr>
+<td colspan="4">{% tr 'Отправленных решений пока нет.' 'Hali yuborilgan yechimlar yo‘q.' %}</td>
+</tr>{% endfor %}</tbody>
+</table>
+</div>
+</section>
+<div class="grid-2 spaced">
+<section class="card">
+<h3>{% tr 'Учебные материалы' 'O‘quv materiallari' %}</h3>{% for lesson in lessons %}<div class="data-row">
+<span>{% if uz %}{{ lesson.uz }}{% else %}{{ lesson.title }}{% endif %}</span>
+<span>{% if lesson.done %}
+{% icon 'check' %}
+{% else %}—{% endif %}</span>
+</div>{% endfor %}</section>
+<section class="card">
+<span class="icon-tile">{% icon 'lock' %}</span>
+<h2 class="spaced">{% tr 'Личный учебный отчёт' 'Shaxsiy o‘quv hisoboti' %}</h2>
+<p>{% tr 'Документ отражает сохранённые действия пользователя и отзывы ревьюеров. Он не является сертификатом квалификации или подтверждением реального трудового стажа.' 'Hujjat foydalanuvchining saqlangan harakatlari va reviewer fikrlarini aks ettiradi. Bu malaka sertifikati yoki haqiqiy ish tajribasi tasdig‘i emas.' %}</p>
+<a href="{% url 'learning' %}" class="btn outline no-print">{% tr 'Продолжить путь' 'Yo‘lni davom ettirish' %}
+{% icon 'arrow' %}</a>
+</section>
+</div>{% include 'projects/lesson_check_summary.html' %}{% endblock %}

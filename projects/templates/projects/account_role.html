@@ -1,0 +1,2 @@
+{% load ui %}
+<small>Python Backend · {% if user.is_superuser %}{% tr 'Администратор' 'Administrator' %}{% elif user.is_staff %}Reviewer{% else %}{% tr 'Ученик' 'O‘rganuvchi' %}{% endif %}</small>

@@ -1,0 +1,10 @@
+{% load ui %}
+<section class="card spaced">
+    <div class="card-header"><h3 class="card-title">{% icon 'check' %}{% tr 'Самопроверки уроков' 'Darslar bo‘yicha tekshiruvlar' %}</h3><span class="badge muted">{{ checked_lessons }} / {{ total }}</span></div>
+    <p>{% tr 'Последние результаты коротких тестов. Они показываются отдельно от ручных отметок изучения и проверок практических задач.' 'Qisqa testlarning oxirgi natijalari. Ular o‘rganish belgilari va amaliy vazifa tekshiruvlaridan alohida ko‘rsatiladi.' %}</p>
+    {% if checked_lessons %}
+        {% for lesson in lessons %}{% if lesson.quiz_score != None %}
+        <div class="data-row"><a href="{% url 'lesson' lesson.slug %}#self-check">{% if uz %}{{ lesson.uz }}{% else %}{{ lesson.title }}{% endif %}</a><span class="badge {% if lesson.quiz_score < 100 %}amber{% endif %}">{{ lesson.quiz_score }} / 100</span></div>
+        {% endif %}{% endfor %}
+    {% else %}<a href="{% url 'learning' %}" class="text-link">{% tr 'Открыть уроки и пройти первую самопроверку' 'Darslarni ochish va birinchi tekshiruvdan o‘tish' %}{% icon 'arrow' %}</a>{% endif %}
+</section>

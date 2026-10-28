@@ -1,0 +1,2 @@
+{% load ui %}
+{% if perms.projects.change_lessoncontent and lesson.content_id %}<a class="btn outline small-btn" href="{% url 'admin:projects_lessoncontent_change' lesson.content_id %}">{% tr 'Редактировать' 'Tahrirlash' %}{% icon 'file' %}</a>{% endif %}

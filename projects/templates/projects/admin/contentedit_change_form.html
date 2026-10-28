@@ -1,0 +1,5 @@
+{% extends 'admin/change_form.html' %}
+{% block object-tools-items %}
+    {{ block.super }}
+    {% if can_restore_content %}<li><a href="{% url 'admin:projects_contentedit_restore' original.pk %}">Восстановить предыдущий текст / Oldingi matnni tiklash</a></li>{% endif %}
+{% endblock %}

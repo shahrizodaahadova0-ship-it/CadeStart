@@ -1,0 +1,11 @@
+{% load ui %}
+{% if draft %}
+<div class="notice">
+    <strong>{% tr 'Ваш черновик загружен' 'Qoralamangiz yuklandi' %}</strong>
+    <small class="field-help">{% tr 'Последнее сохранение:' 'Oxirgi saqlash:' %} {{ draft.updated_at|date:'d.m.Y H:i' }}</small>
+    <form method="post" class="spaced">
+        {% csrf_token %}
+        <button class="btn outline small-btn" name="action" value="discard">{% tr 'Удалить сохранённый черновик' 'Saqlangan qoralamani o‘chirish' %}</button>
+    </form>
+</div>
+{% endif %}

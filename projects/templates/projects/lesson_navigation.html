@@ -1,0 +1,5 @@
+{% load ui %}
+<nav class="flex between wrap spaced" aria-label="{% tr 'Переходы между уроками' 'Darslar orasida o‘tish' %}">
+    {% if previous_lesson %}<a class="btn outline" href="{% url 'lesson' previous_lesson.slug %}">← {% if uz %}{{ previous_lesson.uz }}{% else %}{{ previous_lesson.title }}{% endif %}</a>{% else %}<a href="{% url 'learning' %}" class="text-link">← {% tr 'Учебный путь' 'O‘quv yo‘li' %}</a>{% endif %}
+    {% if next_lesson %}<a class="btn primary" href="{% url 'lesson' next_lesson.slug %}">{% if uz %}{{ next_lesson.uz }}{% else %}{{ next_lesson.title }}{% endif %}{% icon 'arrow' %}</a>{% else %}<a class="btn primary" href="{% url 'kanban' %}">{% tr 'Перейти к практике' 'Amaliyotga o‘tish' %}{% icon 'arrow' %}</a>{% endif %}
+</nav>

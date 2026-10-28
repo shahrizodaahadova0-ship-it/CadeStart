@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Профиль — CodeStart</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+
+            background: #f4f8fb;
+
+            color: #172033;
+        }
+
+        nav {
+            height: 76px;
+
+            background: white;
+
+            border-bottom: 1px solid #e2ebf1;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 0 6%;
+        }
+
+        .logo {
+            font-size: 24px;
+
+            font-weight: 800;
+
+            color: #07111f;
+        }
+
+        .logo span {
+            color: #2878ff;
+        }
+
+        .nav-links {
+            display: flex;
+
+            gap: 20px;
+
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #526579;
+
+            font-size: 14px;
+
+            font-weight: 700;
+        }
+
+        .logout {
+            background: #07111f;
+
+            color: white !important;
+
+            padding: 10px 15px;
+
+            border-radius: 9px;
+        }
+
+        .container {
+            max-width: 1050px;
+
+            margin: auto;
+
+            padding: 45px 6%;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h1 {
+            font-size: 36px;
+
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #718096;
+        }
+
+        .grid {
+            display: grid;
+
+            grid-template-columns:
+                1fr
+                320px;
+
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+
+            border: 1px solid #e2ebf1;
+
+            border-radius: 20px;
+
+            padding: 28px;
+        }
+
+        .avatar {
+            width: 70px;
+            height: 70px;
+
+            border-radius: 20px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #18d889,
+                    #2878ff
+                );
+
+            color: white;
+
+            font-size: 28px;
+
+            font-weight: 800;
+
+            margin-bottom: 17px;
+        }
+
+        .username {
+            font-size: 24px;
+
+            font-weight: 800;
+
+            margin-bottom: 5px;
+        }
+
+        .email {
+            color: #7c8b9b;
+
+            font-size: 14px;
+        }
+
+        .info {
+            margin-top: 25px;
+        }
+
+        .info-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            padding: 13px 0;
+
+            border-bottom: 1px solid #edf1f4;
+
+            font-size: 14px;
+        }
+
+        .label {
+            color: #8190a0;
+        }
+
+        .value {
+            font-weight: 700;
+        }
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 12px;
+        }
+
+        .stat {
+            background: #f5f9fc;
+
+            border-radius: 14px;
+
+            padding: 20px;
+
+            text-align: center;
+        }
+
+        .stat strong {
+            display: block;
+
+            font-size: 27px;
+
+            color: #2878ff;
+
+            margin-bottom: 5px;
+        }
+
+        .stat span {
+            color: #718096;
+
+            font-size: 13px;
+        }
+
+        @media (max-width: 750px) {
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links a:not(.logout) {
+                display: none;
+            }
+
+            .container {
+                padding: 30px 18px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<nav>
+
+    <a href="/" class="logo">
+        Code<span>Start</span>
+    </a>
+
+
+    <div class="nav-links">
+
+        <a href="/">
+            Главная
+        </a>
+
+        <a href="/#projects">
+            Проекты
+        </a>
+
+        <a href="{% url 'logout' %}" class="logout">
+            Выйти
+        </a>
+
+    </div>
+
+</nav>
+
+
+<main class="container">
+
+
+    <div class="welcome">
+
+        <h1>
+            Привет, {{ request.user.username }} 👋
+        </h1>
+
+        <p>
+            Добро пожаловать в твой личный кабинет CodeStart.
+        </p>
+
+    </div>
+
+
+    <div class="grid">
+
+
+        <div class="card">
+
+            <div class="avatar">
+                {{ request.user.username|first|upper }}
+            </div>
+
+            <div class="username">
+                {{ request.user.username }}
+            </div>
+
+            <div class="email">
+                {{ request.user.email|default:"Email не указан" }}
+            </div>
+
+
+            <div class="info">
+
+                <div class="info-row">
+
+                    <span class="label">
+                        Язык
+                    </span>
+
+                    <span class="value">
+                        {% if profile.language == 'ru' %}
+                            🇷🇺 Русский
+                        {% else %}
+                            🇺🇿 O'zbekcha
+                        {% endif %}
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="label">
+                        Аккаунт создан
+                    </span>
+
+                    <span class="value">
+                        {{ request.user.date_joined|date:"d.m.Y" }}
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2 style="margin-bottom: 20px;">
+                Твоя активность
+            </h2>
+
+            <div class="stats">
+
+                <div class="stat">
+
+                    <strong>0</strong>
+
+                    <span>
+                        Избранных
+                    </span>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <strong>0</strong>
+
+                    <span>
+                        Просмотрено
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</main>
+
+
+</body>
+
+</html>

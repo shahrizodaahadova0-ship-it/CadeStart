@@ -1,0 +1,7 @@
+{% load ui %}
+{% if latest.task_snapshot.revision and latest.task_snapshot.revision != task.revision %}
+<div class="notice info flex between wrap">
+    <span>{% tr 'Последняя отправка относится к версии' 'Oxirgi yuborilgan yechim versiyasi' %} v{{ latest.task_snapshot.revision }}. {% tr 'Текущие требования:' 'Joriy talablar:' %} v{{ task.revision }}. {% tr 'Прежняя проверка сохранена. Новую отправку проверят по текущим критериям.' 'Avvalgi tekshiruv saqlangan. Yangi yechim joriy mezonlar bo‘yicha tekshiriladi.' %}</span>
+    <a href="{% url 'review_result' latest.pk %}" class="text-link">{% tr 'Открыть прежнюю проверку' 'Avvalgi tekshiruvni ochish' %}{% icon 'arrow' %}</a>
+</div>
+{% endif %}

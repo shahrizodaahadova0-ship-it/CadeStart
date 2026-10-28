@@ -1,0 +1,4 @@
+{% load ui %}
+{% if perms.projects.view_lessoncontent or perms.projects.change_lessoncontent or perms.projects.view_taskcontent or perms.projects.change_taskcontent %}
+<section class="card spaced"><div class="flex between wrap"><div><h3>{% tr 'История редакций' 'Tahrirlar tarixi' %}</h3><p class="no-margin">{% tr 'Предыдущие тексты, автор и время изменений материалов.' 'Oldingi matnlar, materialni o‘zgartirgan muallif va vaqt.' %}</p></div><a class="btn outline" href="{% url 'admin:projects_contentedit_changelist' %}">{% icon 'clock' %}{% tr 'Открыть историю' 'Tarixni ochish' %}</a></div></section>
+{% endif %}

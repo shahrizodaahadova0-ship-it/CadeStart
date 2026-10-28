@@ -1,0 +1,45 @@
+{% extends 'projects/base.html' %}
+{% load ui %}
+{% block content %}<div class="page-heading">
+<div>
+<span class="eyebrow">{{ task.id }} / SOLUTION</span>
+<h1 class="spaced">{% tr 'Отправьте решение на проверку' 'Yechimni tekshiruvga yuboring' %}</h1>
+<p>{% if uz %}{{ task.uz }}{% else %}{{ task.title }}{% endif %}</p>
+</div>
+<a href="{% url 'task' task.slug %}" class="btn outline small-btn">{% tr 'Описание задачи' 'Vazifa tafsilotlari' %}
+{% icon 'arrow' %}</a>
+</div>
+<div class="split">
+<section class="card">
+<p>{% tr 'Отправьте ссылку на репозиторий или Pull Request и опишите, как проверяли результат.' 'Repozitoriy yoki Pull Request havolasini yuboring va natijani qanday tekshirganingizni yozing.' %}</p>{% include 'projects/submission_draft_notice.html' %}<form method="post" class="fields" data-unsaved-warning>{% csrf_token %}<input type="hidden" name="task_revision" value="{{ task.revision }}">{{ form.non_field_errors }}<div>
+<label for="id_repository">{% tr 'Ссылка на репозиторий или Pull Request' 'Repozitoriy yoki Pull Request havolasi' %} *</label>{{ form.repository }}{{ form.repository.errors }}</div>
+<div>
+<label for="id_commit">Commit SHA <small>({% tr 'необязательно' 'ixtiyoriy' %})</small>
+</label>{{ form.commit }}{{ form.commit.errors }}</div>
+<div>
+<label for="id_description">{% tr 'Что изменилось и как вы это проверили?' 'Nima o‘zgardi va qanday tekshirdingiz?' %} *</label>{{ form.description }}{{ form.description.errors }}</div>
+<div class="checklist">
+<label class="check-line">{{ form.requirements_checked }}{% tr 'Все требования задачи проверены.' 'Vazifaning barcha talablari tekshirildi.' %}</label>{{ form.requirements_checked.errors }}<label class="check-line">{{ form.tests_checked }}{% tr 'Тесты запущены локально, результаты описаны выше.' 'Testlar lokal ishga tushirildi, natijalar yuqorida yozilgan.' %}</label>{{ form.tests_checked.errors }}<label class="check-line">{{ form.secrets_checked }}{% tr 'В решении нет паролей, API-ключей и других секретов.' 'Yechimda parollar, API kalitlar va boshqa sirlar yo‘q.' %}</label>{{ form.secrets_checked.errors }}</div>{% include 'projects/submission_buttons.html' %}</form>
+</section>
+<aside class="card">{% include 'projects/submission_requirements.html' %}
+<span class="icon-tile">{% icon 'user' %}</span>
+<h2 class="spaced">{% tr 'Проверка человеком' 'Inson tekshiruvi' %}</h2>
+<p>{% tr 'Решение сохраняется в системе. Администратор назначает ревьюера, который проверяет код и оставляет обратную связь.' 'Yechim tizimda saqlanadi. Administrator kodni tekshiradigan va fikr bildiradigan reviewerni tayinlaydi.' %}</p>
+<div class="notice info">{% tr 'Локальные тесты не запускаются на этом сервере. Их результаты — дополнительная информация для ревьюера.' 'Lokal testlar bu serverda bajarilmaydi. Ularning natijalari reviewer uchun qo‘shimcha ma’lumot.' %}</div>
+<h3>{% tr 'Что будет дальше?' 'Keyingi qadamlar' %}</h3>
+<ol>
+<li>{% tr 'Назначение ревьюера.' 'Reviewer tayinlanadi.' %}</li>
+<li>{% tr 'Проверка требований и кода.' 'Talablar va kod tekshiriladi.' %}</li>
+<li>{% tr 'Результат и уведомление в аккаунте.' 'Natija va hisobda bildirishnoma.' %}</li>
+</ol>
+</aside>
+</div>
+<section class="card spaced">
+<h3 class="card-title">{% icon 'clock' %}
+{% tr 'История отправок' 'Topshirishlar tarixi' %}</h3>{% for entry in history %}<a class="lesson-row" href="{% url 'review_result' entry.pk %}">
+<span>
+<strong>#{{ entry.pk }}</strong>
+<small>{{ entry.created_at|date:'d.m.Y H:i' }}</small>
+</span>
+<span class="badge">{{ entry.get_status_display }}</span>{% icon 'chevron' %}</a>{% empty %}<p class="no-margin">{% tr 'Вы ещё не отправляли решение этой задачи.' 'Bu vazifa uchun hali yechim yubormagansiz.' %}</p>{% endfor %}</section>{% endblock %}
+

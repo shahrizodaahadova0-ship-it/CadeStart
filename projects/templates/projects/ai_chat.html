@@ -1,0 +1,44 @@
+{% extends 'projects/base.html' %}
+{% load ui %}
+{% block content %}
+<div class="page-heading">
+    <div class="heading-with-icon"><span class="icon-tile big">{% icon 'chat' %}</span><div>
+        <h1>AI {% if role == 'manager' %}{% tr 'менеджер' 'menejer' %}{% else %}{% tr 'ментор' 'mentor' %}{% endif %}</h1>
+        <p>{% tr 'Обсуждайте код и планируйте следующие шаги.' 'Kodni muhokama qiling va keyingi qadamlarni rejalashtiring.' %}</p>
+    </div></div>
+    <a class="btn outline small-btn" href="{% url role %}">{% tr 'Новый диалог' 'Yangi suhbat' %} +</a>
+</div>
+<div class="split">
+    <section class="card chat-panel">
+        {% for message in chat_messages %}
+        <div class="chat-message">
+            <span class="avatar">{% if message.role == 'user' %}{{ user.username|first|upper }}{% else %}{% icon 'chat' %}{% endif %}</span>
+            <div class="chat-bubble">
+                <strong>{% if message.role == 'user' %}{% tr 'Вы' 'Siz' %}{% else %}AI{% endif %}</strong>
+                <div class="ai-response">{{ message.content|linebreaksbr }}</div>
+                <small>{{ message.created_at|date:'d.m.Y H:i' }}</small>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state"><span class="icon-tile big">{% icon 'spark' %}</span><h2>{% tr 'С чего начнём?' 'Nimadan boshlaymiz?' %}</h2><p>{% tr 'Опишите вопрос, ожидаемый результат и то, что уже попробовали.' 'Savol, kutilgan natija va sinab ko‘rgan ishlaringizni yozing.' %}</p></div>
+        {% endfor %}
+        <form method="post" class="fields spaced" data-ai-form>
+            {% csrf_token %}
+            {% if conversation %}<input type="hidden" name="conversation" value="{{ conversation.pk }}">{% endif %}
+            {{ form.non_field_errors }}
+            <div><label for="id_question">{% tr 'Ваш вопрос' 'Savolingiz' %}</label>{{ form.question }}{{ form.question.errors }}</div>
+            <label class="check-line">{{ form.consent }}{% tr 'Отправить вопрос и последние сообщения этого диалога в OpenAI для получения ответа.' 'Javob olish uchun savol va ushbu suhbatning oxirgi xabarlarini OpenAI ga yuborish.' %}</label>
+            {{ form.consent.errors }}
+            <button class="btn primary" data-ai-send>{% tr 'Отправить' 'Yuborish' %}{% icon 'arrow' %}</button>
+            <small class="field-help" data-ai-status role="status">{% tr 'Ответ AI может содержать ошибки. Код не выполняется, результат проверки задания не меняется.' 'AI javobida xatolar bo‘lishi mumkin. Kod bajarilmaydi, vazifa tekshiruv natijasi o‘zgarmaydi.' %}</small>
+        </form>
+    </section>
+    <aside class="stack">
+        <section class="card"><h3>{% tr 'Ваши диалоги' 'Suhbatlaringiz' %}</h3>
+            {% for entry in conversations %}<a class="history-item" href="?conversation={{ entry.pk }}">{{ entry.title }}<br><small>{{ entry.created_at|date:'d.m.Y' }}</small></a>{% empty %}<p>{% tr 'История пока пуста.' 'Tarix hozircha bo‘sh.' %}</p>{% endfor %}
+        </section>
+        <section class="card"><h3>{% tr 'Полезные материалы' 'Foydali materiallar' %}</h3><a href="{% url 'learning' %}" class="lesson-row">{% icon 'book' %}{% tr 'Учебный путь' 'O‘quv yo‘li' %}</a><a href="{% url 'documents' %}" class="lesson-row">{% icon 'file' %}{% tr 'Документация проекта' 'Loyiha hujjatlari' %}</a></section>
+        {% if conversation %}<form method="post" action="{% url 'delete_conversation' conversation.pk %}" data-delete-chat>{% csrf_token %}<button class="btn outline block">{% tr 'Удалить этот диалог' 'Ushbu suhbatni o‘chirish' %}</button></form>{% endif %}
+    </aside>
+</div>
+{% endblock %}

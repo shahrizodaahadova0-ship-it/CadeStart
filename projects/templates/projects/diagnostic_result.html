@@ -1,0 +1,44 @@
+{% extends 'projects/base.html' %}
+{% load ui %}
+{% block content %}
+<div class="page-heading">
+    <div>
+        <h1>{% tr 'Результат диагностики' 'Diagnostika natijasi' %}</h1>
+        <p>{% tr 'Отправная точка для дальнейшего обучения.' 'Keyingi o‘qish uchun boshlanish nuqtasi.' %}</p>
+    </div>
+</div>
+{% if profile.diagnostic_score != None %}
+<div class="split">
+    <section class="card">
+        <span class="icon-tile big">{% icon 'chart' %}</span>
+        <h2 class="spaced">{% tr 'Ваш результат' 'Sizning natijangiz' %}</h2>
+        <div class="stat-big">{{ profile.diagnostic_score }}<small style="font-size:25px"> / 100</small></div>
+        {% include 'projects/progress_meter.html' with value=profile.diagnostic_score %}
+        <p class="spaced">{% tr 'Результат показывает ответы на вопросы теста, а не степень владения навыками.' 'Natija test savollariga javoblarni ko‘rsatadi, ko‘nikma darajasini emas.' %}</p>
+        {% for topic in topic_results %}
+        <div class="data-row">
+            <span>{% if uz %}{{ topic.uz }}{% else %}{{ topic.title }}{% endif %}</span>
+            <strong>{{ topic.correct }} / {{ topic.count }}</strong>
+        </div>
+        {% endfor %}
+    </section>
+    <aside class="card">
+        <span class="eyebrow">YOUR NEXT STEP</span>
+        <h2 class="spaced">{% tr 'Рекомендуем начать здесь' 'Shu yerdan boshlashni tavsiya qilamiz' %}</h2>
+        <h3>{% if uz %}{{ recommendation.uz }}{% else %}{{ recommendation.title }}{% endif %}</h3>
+        <p>{{ recommendation.summary }}</p>
+        <p>{% tr 'Выбрана первая тема учебного пути, где были ошибки или пропуски. Если все ответы верны, предлагаем закрепить знания тестированием. Изученные уроки останутся отмеченными.' 'Xato yoki o‘tkazib yuborilgan javob bor birinchi mavzu tanlandi. Barcha javoblar to‘g‘ri bo‘lsa, testlash bilan bilimni mustahkamlash tavsiya etiladi. O‘rganilgan darslar belgilari saqlanadi.' %}</p>
+        <a href="{% url 'lesson' recommendation.slug %}" class="btn primary block">
+            {% tr 'Открыть рекомендованный урок' 'Tavsiya etilgan darsni ochish' %}{% icon 'arrow' %}
+        </a>
+        <a href="{% url 'learning' %}" class="text-link spaced">{% tr 'Весь учебный путь' 'Barcha o‘quv yo‘li' %}{% icon 'arrow' %}</a>
+        <a href="{% url 'diagnostic' %}" class="text-link spaced">{% tr 'Пройти тест заново' 'Testni qayta topshirish' %}</a>
+    </aside>
+</div>
+{% else %}
+<div class="card empty-state">
+    <h2>{% tr 'Диагностика ещё не пройдена' 'Diagnostika hali topshirilmagan' %}</h2>
+    <a class="btn primary" href="{% url 'diagnostic' %}">{% tr 'Начать тест' 'Testni boshlash' %}</a>
+</div>
+{% endif %}
+{% endblock %}

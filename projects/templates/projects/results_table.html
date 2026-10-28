@@ -1,0 +1,40 @@
+{% load ui %}
+<section class="card spaced">
+    <h3>{% tr 'Результаты практики' 'Amaliyot natijalari' %}</h3>
+    <nav class="tabs">
+        <a class="{% if not history %}active{% endif %}" href="{% url 'results' %}">{% tr 'Последние версии задач' 'Vazifalarning oxirgi versiyalari' %}</a>
+        <a class="{% if history %}active{% endif %}" href="?view=history">{% tr 'История всех попыток' 'Barcha urinishlar tarixi' %}</a>
+    </nav>
+    <form method="get" class="flex wrap spaced">
+        {% if history %}<input type="hidden" name="view" value="history">{% endif %}
+        <div><label for="result-status">{% tr 'Статус проверки' 'Tekshiruv holati' %}</label>
+            <select id="result-status" name="status">
+                <option value="">{% tr 'Все статусы' 'Barcha holatlar' %}</option>
+                <option value="review" {% if selected_status == 'review' %}selected{% endif %}>{% tr 'На проверке' 'Tekshiruvda' %}</option>
+                <option value="changes" {% if selected_status == 'changes' %}selected{% endif %}>{% tr 'Доработка' 'Tuzatish kerak' %}</option>
+                <option value="done" {% if selected_status == 'done' %}selected{% endif %}>{% tr 'Принято' 'Qabul qilingan' %}</option>
+            </select>
+        </div>
+        <button class="btn outline small-btn">{% tr 'Применить' 'Qo‘llash' %}</button>
+    </form>
+    <p class="field-help spaced">{% tr 'Принятые задачи считаются по последней отправленной версии. Все предыдущие попытки сохранены в истории.' 'Qabul qilingan vazifalar oxirgi yuborilgan versiya bo‘yicha hisoblanadi. Oldingi urinishlar tarixda saqlangan.' %}</p>
+    <div class="table-wrap"><table>
+        <thead><tr><th>{% tr 'Задача' 'Vazifa' %}</th><th>{% tr 'Дата' 'Sana' %}</th><th>{% tr 'Статус' 'Holat' %}</th><th>{% tr 'Оценка' 'Baho' %}</th><th></th></tr></thead>
+        <tbody>{% for entry in submissions %}
+            <tr>
+                <td><strong>{% if uz %}{{ entry.task_title_uz }}{% else %}{{ entry.task_title }}{% endif %}</strong><p>#{{ entry.pk }}{% if entry.task_snapshot.revision %} · v{{ entry.task_snapshot.revision }}{% endif %}</p></td>
+                <td>{{ entry.created_at|date:'d.m.Y H:i' }}</td>
+                <td><span class="badge {% if entry.status == 'review' %}amber{% elif entry.status == 'changes' %}red{% endif %}">{% if uz %}{{ entry.status_uz }}{% else %}{{ entry.get_status_display }}{% endif %}</span></td>
+                <td>{% if entry.score != None %}{{ entry.score }} / 100{% else %}—{% endif %}</td>
+                <td><a class="text-link" href="{% url 'review_result' entry.pk %}">{% tr 'Открыть' 'Ochish' %}{% icon 'arrow' %}</a></td>
+            </tr>
+        {% empty %}<tr><td colspan="5">{% tr 'Для выбранного режима результатов нет.' 'Tanlangan rejim uchun natijalar yo‘q.' %}</td></tr>{% endfor %}</tbody>
+    </table></div>
+    {% if submissions.has_other_pages %}
+    <nav class="pagination spaced" aria-label="{% tr 'Страницы результатов' 'Natijalar sahifalari' %}">
+        {% if submissions.has_previous %}<a class="btn outline small-btn" href="{% querystring page=submissions.previous_page_number %}">← {% tr 'Назад' 'Orqaga' %}</a>{% endif %}
+        <small>{{ submissions.number }} / {{ submissions.paginator.num_pages }}</small>
+        {% if submissions.has_next %}<a class="btn outline small-btn" href="{% querystring page=submissions.next_page_number %}">{% tr 'Далее' 'Keyingi' %} →</a>{% endif %}
+    </nav>
+    {% endif %}
+</section>

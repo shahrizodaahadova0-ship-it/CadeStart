@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: codestart
+    runtime: python
+    plan: 0.5c-512mb
+    buildCommand: bash deploy/render-build.sh
+    startCommand: python -m deploy.render_start
+    healthCheckPath: /health/
+    disk:
+      name: codestart-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.14.10
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.render_settings
+      - key: DJANGO_DEBUG
+        value: 'false'
+      - key: CODESTART_DATA_DIR
+        value: /var/data
+      - key: DJANGO_SECRET_KEY
+        sync: false

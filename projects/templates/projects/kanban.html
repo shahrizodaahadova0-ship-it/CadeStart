@@ -1,0 +1,79 @@
+{% extends 'projects/base.html' %}
+{% load ui %}
+{% block content %}
+<div class="page-heading">
+    <div class="heading-with-icon">
+        <span class="icon-tile big">{% icon 'cart' %}</span>
+        <div>
+            <h1>{% tr 'Интернет-магазин' 'Internet-do‘kon' %}</h1>
+            <p>{% tr 'Доска задач · Python Backend' 'Vazifalar doskasi · Python Backend' %}</p>
+        </div>
+    </div>
+    <a href="{% url 'team' %}" class="btn outline small-btn">{% icon 'users' %}{% tr 'Команда проекта' 'Loyiha jamoasi' %}</a>
+</div>
+{% include 'projects/company_tabs.html' %}
+<div class="notice info">
+    {% tr 'Сохранённый черновик переводит новую задачу в работу. После отправки статус определяется последней версией решения и результатом проверки.' 'Saqlangan qoralama yangi vazifani ish jarayoniga o‘tkazadi. Yuborilgach, holat oxirgi yechim va tekshiruv natijasiga asoslanadi.' %}
+</div>
+<form method="get" class="board-filters card">
+    <div class="board-search-field">
+        <label for="task-search">{% tr 'Название, ID или технология' 'Nomi, ID yoki texnologiya' %}</label>
+        <input id="task-search" name="q" value="{{ query }}" maxlength="200" placeholder="SHOP-03, Python…" type="search">
+    </div>
+    <div>
+        <label for="task-status">{% tr 'Статус' 'Holat' %}</label>
+        <select id="task-status" name="status">
+            <option value="">{% tr 'Все статусы' 'Barcha holatlar' %}</option>
+            <option value="todo" {% if selected_status == 'todo' %}selected{% endif %}>{% tr 'Задачи' 'Vazifalar' %}</option>
+            <option value="inprogress" {% if selected_status == 'inprogress' %}selected{% endif %}>{% tr 'В работе' 'Jarayonda' %}</option>
+            <option value="review" {% if selected_status == 'review' %}selected{% endif %}>{% tr 'На проверке' 'Tekshiruvda' %}</option>
+            <option value="changes" {% if selected_status == 'changes' %}selected{% endif %}>{% tr 'Доработка' 'Tuzatish kerak' %}</option>
+            <option value="done" {% if selected_status == 'done' %}selected{% endif %}>{% tr 'Готово' 'Bajarildi' %}</option>
+        </select>
+    </div>
+    <button class="btn primary" type="submit">{% icon 'search' %}{% tr 'Найти' 'Qidirish' %}</button>
+    {% if query or selected_status %}<a class="text-link" href="{% url 'kanban' %}">{% tr 'Сбросить' 'Tozalash' %}</a>{% endif %}
+</form>
+<p class="filter-note spaced" role="status">{% tr 'Найдено задач:' 'Topilgan vazifalar:' %} {{ found }}</p>
+{% if found %}
+<div class="kanban {% if selected_status %}filtered-board{% endif %}">
+    {% for column in columns %}
+    <section class="kanban-column">
+        <div class="column-title">
+            <strong>{% if uz %}{{ column.uz }}{% else %}{{ column.title }}{% endif %}</strong>
+            <span class="badge {% if column.key == 'review' %}blue{% elif column.key == 'changes' %}amber{% else %}muted{% endif %}">{{ column.tasks|length }}</span>
+        </div>
+        {% for task in column.tasks %}
+        <article class="task-card">
+            <a href="{% url 'task' task.slug %}" class="task-card-main">
+                <span class="task-number">{{ task.id }}</span>
+                {% if task.draft %}<span class="badge muted">{% tr 'Есть черновик' 'Qoralama bor' %}</span>{% endif %}
+                <h3>{% if uz %}{{ task.uz }}{% else %}{{ task.title }}{% endif %}</h3>
+                {% if task.submission.task_snapshot.revision and task.submission.task_snapshot.revision != task.revision %}<span class="badge amber">{% tr 'Отправлена другая версия' 'Boshqa versiya yuborilgan' %}</span>{% endif %}
+                <p>{{ task.description }}</p>
+                <div class="flex wrap">
+                    <span class="badge blue">{{ task.tag }}</span>
+                    <span class="badge {% if task.priority == 'High' %}red{% elif task.priority == 'Medium' %}amber{% endif %}">{{ task.priority }}</span>
+                </div>
+            </a>
+            {% if task.submission %}
+            <a class="text-link task-review-link" href="{% url 'review_result' task.submission.pk %}">
+                {% tr 'Последняя отправка' 'Oxirgi yuborish' %} #{{ task.submission.pk }} {% icon 'arrow' %}
+            </a>
+            {% endif %}
+        </article>
+        {% empty %}
+        <p class="board-column-empty">{% tr 'Пока нет задач' 'Hozircha vazifa yo‘q' %}</p>
+        {% endfor %}
+    </section>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card empty-state">
+    <span class="icon-tile big">{% icon 'search' %}</span>
+    <h2>{% tr 'Задачи не найдены' 'Vazifalar topilmadi' %}</h2>
+    <p>{% tr 'Измените поисковый запрос или выберите другой статус.' 'Qidiruv so‘rovini o‘zgartiring yoki boshqa holatni tanlang.' %}</p>
+    <a class="btn outline" href="{% url 'kanban' %}">{% tr 'Показать все задачи' 'Barcha vazifalarni ko‘rsatish' %}</a>
+</div>
+{% endif %}
+{% endblock %}

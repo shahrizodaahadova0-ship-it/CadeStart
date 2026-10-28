@@ -1,0 +1,12 @@
+{% load ui %}
+<section class="card spaced">
+    <h2>{% tr 'Практические задания' 'Amaliy vazifalar' %}</h2>
+    <p>{% tr 'Требования редактируются на двух языках. Каждое изменение получает новую версию; отправленные решения сохраняют прежние критерии.' 'Talablar ikki tilda tahrirlanadi. Har bir o‘zgarish yangi versiya oladi; yuborilgan yechimlar oldingi mezonlarni saqlaydi.' %}</p>
+    <div class="table-wrap"><table>
+        <thead><tr><th>ID</th><th>{% tr 'Задание' 'Vazifa' %}</th><th>{% tr 'Версия' 'Versiya' %}</th><th></th></tr></thead>
+        <tbody>{% for task in tasks %}<tr>
+            <td>{{ task.id }}</td><td><strong>{% if uz %}{{ task.uz }}{% else %}{{ task.title }}{% endif %}</strong><p>{{ task.tag }} · {{ task.priority }}</p></td><td>v{{ task.revision }}</td>
+            <td>{% if perms.projects.change_taskcontent and task.content_id %}<a class="btn outline small-btn" href="{% url 'admin:projects_taskcontent_change' task.content_id %}">{% tr 'Редактировать' 'Tahrirlash' %}</a>{% endif %}<a class="text-link" href="{% url 'task' task.slug %}">{% tr 'Открыть' 'Ochish' %}</a></td>
+        </tr>{% endfor %}</tbody>
+    </table></div>
+</section>

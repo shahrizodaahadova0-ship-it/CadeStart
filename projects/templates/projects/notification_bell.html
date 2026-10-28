@@ -1,0 +1,5 @@
+{% load ui %}
+<a class="icon-button notification-bell" href="{% url 'notifications' %}" aria-label="{% tr 'Уведомления, непрочитанных:' 'Bildirishnomalar, o‘qilmagan:' %} {{ unread_notifications }}">
+    {% icon 'bell' %}
+    {% if unread_notifications %}<span class="notification-count" aria-hidden="true">{% if unread_notifications > 99 %}99+{% else %}{{ unread_notifications }}{% endif %}</span>{% endif %}
+</a>

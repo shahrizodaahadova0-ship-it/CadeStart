@@ -1,0 +1,8 @@
+{% load ui %}
+<section class="card spaced">
+    <div class="flex between wrap"><div>
+        <h3>{% tr 'Сводка по последним версиям' 'Oxirgi versiyalar bo‘yicha xulosa' %}</h3>
+        <p>{% tr 'Принято задач:' 'Qabul qilingan vazifalar:' %} {{ accepted }} · {% tr 'Всего отправок:' 'Jami yuborishlar:' %} {{ submission_count }}</p>
+        <small>{% tr 'Ниже показана последняя отправка каждой задачи. JSON и Markdown также содержат полную историю попыток.' 'Quyida har bir vazifaning oxirgi yuborilgan versiyasi ko‘rsatilgan. JSON va Markdown barcha urinishlar tarixini ham o‘z ichiga oladi.' %}</small>
+    </div><a class="text-link no-print" href="{% url 'results' %}?view=history">{% tr 'История попыток' 'Urinishlar tarixi' %}{% icon 'arrow' %}</a></div>
+</section>

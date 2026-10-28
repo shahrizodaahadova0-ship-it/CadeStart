@@ -1,0 +1,13 @@
+{% load ui %}
+{% if all_completed %}
+<div class="notice flex between wrap">
+    <span>{% icon 'check' %} {% tr 'Все уроки изучены. Можно повторить материал или перейти к практическим заданиям.' 'Barcha darslar o‘rganildi. Materialni takrorlang yoki amaliy vazifalarga o‘ting.' %}</span>
+    <a class="text-link" href="{% url 'kanban' %}">{% tr 'К практике' 'Amaliyotga' %}{% icon 'arrow' %}</a>
+</div>
+{% endif %}
+{% if active == 'dashboard' and user.profile.diagnostic_draft %}
+<div class="notice flex between wrap">
+    <span>{% tr 'У вас есть незавершённая диагностика. Ответы сохранены.' 'Sizda tugallanmagan diagnostika bor. Javoblar saqlangan.' %}</span>
+    <a class="text-link" href="{% url 'diagnostic' %}">{% tr 'Продолжить тест' 'Testni davom ettirish' %}{% icon 'arrow' %}</a>
+</div>
+{% endif %}

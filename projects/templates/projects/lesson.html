@@ -1,0 +1,42 @@
+{% extends 'projects/base.html' %}
+{% load ui %}
+{% block content %}<div class="page-heading">
+<div>
+<span class="eyebrow">PYTHON BACKEND / {{ lesson.level }}</span>
+<h1 class="spaced">{% if uz %}{{ lesson.uz }}{% else %}{{ lesson.title }}{% endif %}</h1>
+<p>{% tr 'Теория и самостоятельная практика' 'Nazariya va mustaqil amaliyot' %} · {{ lesson.minutes }} {% tr 'минут' 'daqiqa' %}</p>
+</div>
+<a href="{% url 'learning' %}" class="btn outline small-btn">← {% tr 'Все уроки' 'Barcha darslar' %}</a>
+</div>
+<div class="lesson-layout">
+<section class="card">
+<h3 class="card-title">{% icon 'book' %}
+{% tr 'Урок' 'Dars' %}</h3>
+<p class="lesson-copy">{{ lesson.text }}</p>
+<div class="notice info">{% tr 'Черновик сохраняется в вашем аккаунте. Код здесь не выполняется; запускайте его локально. Результат можно отправить на проверку в разделе заданий.' 'Qoralama hisobingizda saqlanadi. Kod bu yerda bajarilmaydi; uni lokal ishga tushiring. Natijani vazifalar bo‘limida tekshiruvga yuboring.' %}</div>
+<details>
+<summary>{% tr 'Получить подсказку' 'Ishora olish' %}</summary>
+<p>{{ lesson.hint }}</p>
+</details>
+<a class="text-link" href="{% url 'mentor' %}">{% tr 'Открыть материалы ментора' 'Mentor materiallarini ochish' %}
+{% icon 'arrow' %}</a>
+</section>
+<form method="post" class="card editor-card" data-unsaved-warning>{% csrf_token %}<div class="editor-toolbar">
+<span class="flex">{% icon 'file' %} notes.txt</span>
+<span class="badge {% if progress.completed %}
+{% else %}blue{% endif %}">{% if progress.completed %}
+{% tr 'Изучено' 'O‘rganildi' %}
+{% else %}
+{% tr 'Черновик' 'Qoralama' %}
+{% endif %}</span>
+</div>
+<label for="lesson-code" class="field-help" style="padding:10px 20px 0">{% tr 'Ваш код и заметки' 'Kodingiz va qaydlaringiz' %}</label>
+<textarea class="code-editor" id="lesson-code" name="code" maxlength="20000" spellcheck="false" data-code-editor>{{ code }}</textarea>
+<div class="editor-actions">
+<button class="btn primary" name="action" value="save">{% tr 'Сохранить черновик' 'Qoralamani saqlash' %}</button>
+{% if not progress.completed %}<button class="btn outline" name="action" value="complete">{% icon 'check' %}
+{% tr 'Урок изучен' 'Dars o‘rganildi' %}</button>{% endif %}
+</div>
+</form>
+</div>{% include 'projects/lesson_repeat.html' %}{% include 'projects/lesson_check.html' %}
+{% include 'projects/lesson_navigation.html' %}{% endblock %}

@@ -1,0 +1,8 @@
+{% load ui %}
+<p class="field-help spaced">
+    {% if mail_is_console %}
+        {% tr 'В локальном режиме письма выводятся в консоль сервера. Доставка на почту ещё не настроена.' 'Lokal rejimda xatlar server konsoliga chiqariladi. Emailga yetkazish hali sozlanmagan.' %}
+    {% else %}
+        {% tr 'Если письмо не появилось, проверьте папку «Спам» и правильность адреса.' 'Xat kelmagan bo‘lsa, «Spam» papkasi va manzil to‘g‘riligini tekshiring.' %}
+    {% endif %}
+</p>
