@@ -17,7 +17,7 @@ class RenderStartTests(SimpleTestCase):
             if existing:
                 root.mkdir()
                 database.touch()
-            settings = SimpleNamespace(DATA_ROOT=root, DATABASES={'default': {'NAME': database}})
+            settings = SimpleNamespace(DATA_ROOT=root, DATABASES={'default': {'NAME': database, 'ENGINE': 'django.db.backends.sqlite3'}})
             with patch('django.setup'), patch('django.conf.settings', settings), \
                     patch.dict('os.environ', {'PORT': '12345'}), \
                     patch('deploy.render_start.subprocess.run', side_effect=failure) as run, \
@@ -43,3 +43,12 @@ class RenderStartTests(SimpleTestCase):
 
     def test_failed_migration_prevents_server_start(self):
         self.run_start(failure=subprocess.CalledProcessError(1, 'migrate'))
+
+    def test_postgres_does_not_require_a_local_disk_or_sqlite_backup(self):
+        settings = SimpleNamespace(DATABASES={'default': {'NAME': 'neondb', 'ENGINE': 'django.db.backends.postgresql'}})
+        with patch('django.setup'), patch('django.conf.settings', settings), \
+                patch.dict('os.environ', {}), patch('deploy.render_start.subprocess.run') as run, \
+                patch('deploy.render_start.os.execvp') as launch:
+            main()
+        self.assertEqual([call.args[0][2] for call in run.call_args_list], ['migrate'])
+        launch.assert_called_once()

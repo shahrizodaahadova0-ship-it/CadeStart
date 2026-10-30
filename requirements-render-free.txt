@@ -1,0 +1,3 @@
+-r requirements-render.txt
+dj-database-url==3.1.2
+psycopg[binary]==3.3.6

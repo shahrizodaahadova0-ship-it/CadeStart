@@ -10,9 +10,11 @@ def main():
     django.setup()
     from django.conf import settings
 
-    settings.DATA_ROOT.mkdir(parents=True, exist_ok=True)
-    if settings.DATABASES['default']['NAME'].exists():
-        subprocess.run([sys.executable, 'manage.py', 'backup_database'], check=True)
+    database = settings.DATABASES['default']
+    if database['ENGINE'] == 'django.db.backends.sqlite3':
+        settings.DATA_ROOT.mkdir(parents=True, exist_ok=True)
+        if database['NAME'].exists():
+            subprocess.run([sys.executable, 'manage.py', 'backup_database'], check=True)
     subprocess.run([sys.executable, 'manage.py', 'migrate', '--noinput'], check=True)
     port = int(os.environ.get('PORT', '10000'))
     os.execvp(sys.executable, [sys.executable, '-m', 'gunicorn', 'config.wsgi:application',
